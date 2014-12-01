@@ -3,16 +3,23 @@ game.TitleScreen = me.ScreenObject.extend({
 	 *  action to perform on state change
 	 */
 	onResetEvent: function() {	
-		; // TODO
-                var titleImage = new me.Sprite(0, 0, me.loader.getImage ("title-screen"));
-                me.game.world.addChild(titleImage, 1);
+              me.game.world.addChild(new me.Sprite(0, 0, me.loader.getImage ("title-screen")),3)
+              me.input.bindKey(me.input.KEY.ENTER, "start");
+              
+              this.handler = me.event.subscribe(me.event.KEYDOWN, function(action, keyCode, edge){
+                  if(action === "start") {
+                      me.state.change(me.state.PLAY);
+                  }
+              });
 	},
 	
 	
 	/**	
 	 *  action to perform when leaving this screen (state change)
 	 */
+          /**var titleImage = new me.Sprite(0, 0, me.loader.getImage ("title-screen"));*/
+          /**me.game.world.addChild(titleImage, 1);*/
 	onDestroyEvent: function() {
-		; // TODO
+           me.input.unbindKey(me.input.KEY.ENTER);
 	}
 });
