@@ -47,6 +47,41 @@ game.PlayerEntity = me.Entity.extend ({
         
         
         
+        if(me.input.isKeyPressed("up")) {
+          this.body.vel.y -= this.body.accel.y * me.timer.tick; 
+         
+        }else{
+            this.body.vel.y = 0;
+        }
+        
+         this.body.update(delta);
+         me.collision.check(this, true, this.collideHandler.bind(this), true);
+        
+        
+        
+        if (me.input.isKeyPressed("left")) {
+            this.body.vel.x -= this.body.accel.x * me.timer.tick;
+
+        } else {
+            this.body.vel.x = -1;
+        }
+
+        this.body.update(delta);
+        me.collision.check(this, true, this.collideHandler.bind(this), true);
+        if (this.body.vel.x !== 0) {
+            if (!this.renderable.isCurrentAnimation("smallWalk")) {
+                this.renderable.setCurrentAnimation("smallWalk");
+                this.renderable.setAnimationFrame();
+            }
+        } else {
+            this.renderable.setCurrentAnimation("idle");
+        }
+        
+        
+        
+        
+        
+        
         this._super(me.Entity, "update", [delta]);
         return true;
     },
