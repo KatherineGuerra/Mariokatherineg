@@ -26,48 +26,17 @@ game.PlayerEntity = me.Entity.extend ({
     },
      
     update: function(delta){
-        if(me.input.isKeyPressed("right")) {
-          this.body.vel.x += this.body.accel.x * me.timer.tick; 
-         
-        }else{
-            this.body.vel.x = 0;
-        }
-        
-        this.body.update(delta);
-        me.collision.check(this, true, this.collideHandler.bind(this), true);
-        
-        if(this.body.vel.x !== 0){
-            if(!this.renderable.isCurrentAnimation("smallWalk")){
-                this.renderable.setCurrentAnimation("smallWalk");
-                this.renderable.setAnimationFrame();
-            }
-        }else{
-               this.renderable.setCurrentAnimation("idle");
-        }
-        
-        
-        
-        if(me.input.isKeyPressed("up")) {
-          this.body.vel.y -= this.body.accel.y * me.timer.tick; 
-         
-        }else{
-            this.body.vel.y = 0;
-        }
-        
-         this.body.update(delta);
-         me.collision.check(this, true, this.collideHandler.bind(this), true);
-        
-        
-        
-        if (me.input.isKeyPressed("left")) {
-            this.body.vel.x -= this.body.accel.x * me.timer.tick;
+        if (me.input.isKeyPressed("right")) {
+            this.flipX(false);
+            this.body.vel.x += this.body.accel.x * me.timer.tick;
 
         } else {
-            this.body.vel.x = -1;
+            this.body.vel.x = 0;
         }
 
         this.body.update(delta);
         me.collision.check(this, true, this.collideHandler.bind(this), true);
+
         if (this.body.vel.x !== 0) {
             if (!this.renderable.isCurrentAnimation("smallWalk")) {
                 this.renderable.setCurrentAnimation("smallWalk");
@@ -76,12 +45,37 @@ game.PlayerEntity = me.Entity.extend ({
         } else {
             this.renderable.setCurrentAnimation("idle");
         }
-        
-        
-        
-        
-        
-        
+
+
+        if (me.input.isKeyPressed("up")) {
+            if (!this.body.jumping && !this.body.falling) {
+                this.body.vel.y -= this.body.maxVel.y * me.timer.tick;
+                this.body.jumping = true;
+            }
+
+        }
+
+
+        if (me.input.isKeyPressed("left")) {
+            this.flipX(true);
+            this.body.vel.x -= this.body.accel.x * me.timer.tick;
+
+        } else {
+            this.body.vel.x = 0;
+        }
+
+        this.body.update(delta);
+        me.collision.check(this, true, this.collideHandler.bind(this), true);
+
+        if (this.body.vel.x !== 0) {
+            if (!this.renderable.isCurrentAnimation("smallWalk")) {
+                this.renderable.setCurrentAnimation("smallWalk");
+                this.renderable.setAnimationFrame();
+            }
+        } else {
+            this.renderable.setCurrentAnimation("idle");
+        }
+
         this._super(me.Entity, "update", [delta]);
         return true;
     },
@@ -122,3 +116,48 @@ game.LevelTrigger = me.Entity.extend({
         //}else{
               // this.renderable.setCurrentAnimation("idle");
        // }
+        // if(me.input.isKeyPressed("jump")) {
+          //this.body.vel.y -= this.body.accel.y * me.timer.tick; 
+         
+        //}else{
+           // this.body.vel.y = 0;
+       // } 
+       
+       //
+        
+         // if (me.input.isKeyPressed("left")) {
+          //  this.flipX(true);
+           // this.body.vel.x -= this.body.accel.x * me.timer.tick;
+            //if (!this.renderable.isCurrentAnimation("walk")) {
+             //   this.renderable.setCurrentAnimation("walk");
+            //}
+            
+       // } else if (me.input.isKeyPressed("right")) {
+           // this.flipX(false);
+           // this.body.vel.x += this.body.accel.x * me.timer.tick;
+           // if (!this.renderable.isCurrentAnimation("walk")) {
+            //    this.renderable.setCurrentAnimation("walk");
+           // }
+            
+       // } else {
+            //this.body.vel.x = 0;
+            //this.renderable.setCurrentAnimation("stand");
+        //}    
+        
+        //if (me.input.isKeyPressed('jump')) {
+
+           // if (!this.body.jumping && !this.body.falling) {
+
+               // this.body.vel.y -= this.body.maxVel.y * me.timer.tick;
+               
+               // this.body.jumping = true;
+           // }
+ 
+       // }
+ 
+        
+      
+       //this.body.update(delta);
+        //me.collision.check(this, true, this.collideHandler.bind(this), true);  
+       
+        

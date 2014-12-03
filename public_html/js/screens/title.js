@@ -34,6 +34,7 @@ game.TitleScreen = me.ScreenObject.extend({
           /**me.game.world.addChild(titleImage, 1);*/
 	onDestroyEvent: function() {
            me.input.unbindKey(me.input.KEY.ENTER);
+           me.event.unsubscribe(this.handler);
 	}
 });
                  
