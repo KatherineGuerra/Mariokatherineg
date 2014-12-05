@@ -15,21 +15,26 @@ game.PlayerEntity = me.Entity.extend ({
         }]);
      
      this.renderable.addAnimation("idle", [3]);
+     //adds an aray which values 8-13
      this.renderable.addAnimation("smallWalk", [8,9, 10, 11, 12, 13], 80);
      
      this.renderable.setCurrentAnimation("idle");
      
      this.body.setVelocity(5, 20);
-     
+     //makes the screen follow mario's position
      me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
      
     },
      
     update: function(delta){
+        //makes mario move right when the right key is press
         if (me.input.isKeyPressed("right")) {
+            //flips the mario back to the right
             this.flipX(false);
+            //adds value to marios x position
+            //me.timer.tick moves the animation when update
             this.body.vel.x += this.body.accel.x * me.timer.tick;
-
+           
         } else if (me.input.isKeyPressed("left")) {
             this.flipX(true);
             this.body.vel.x -= this.body.accel.x * me.timer.tick;
@@ -120,14 +125,42 @@ game.BadGuy = me.Entity.extend({
     this.Alive = true;
     this.type = "BadGuy";
     
-    this.renderable.addAnimation("run", [0, 1, 2], 80);
-    
+   // this.renderable.addAnimation("run", [0, 1, 2], 80);
+   // this.renderable.addCurrentAnimation("run");
+   
+   this.body.setVelocity(4, 6);
+   
+   
+   
     },
     update: function(delta){
+      this.body.update(delta);
+      me.collision.check(this, true, this.collideHandler.bind(this), true); 
+      
+      if(this.alive){
+          if(this.walkLeft && this.pos.x <= this.startx){
+              this.walkLeft = false;
+          }else if(!this.walkLeft && this.pos.x >= this.endX){
+              this.walkLeft = true;
+          }
+          this.flipX(!this.walkLeft);
+          this.body.vel.x += (this.walkLeft) ? -this.body.accel.x * me.timer.tick : this.body.accel.x * me.timer.tick;
+      }else{
+          me.game.world.removeChild(this);
+      }
+      
+      
+      this._super(me.Entity, "update", [delta]);
+      return true;
+    },
+    
+    collideHandler: function(){
         
     }
     
 });
+
+
  
         
         //if(me.input.isKeyPressed("left")) {
